@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
 import { setAuthToken } from "@/app/serverActions/setAuthToken"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -21,7 +22,7 @@ const loginSchema = z.object({
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-
+  const router=useRouter()
   const {
     register,
     handleSubmit,
@@ -40,16 +41,23 @@ const onSubmit = async (data: LoginFormInputs): Promise<void> => {
     setSuccess(null)
 
     try {
-     const res= await fetch(`${process.env.NEXT_BACKEND_URL}auth/login`, {
+     const res= await fetch(`${process.env.NEXT_BACKEND_URL}user/login`, {
           headers:{
           "Content-Type": "application/json",
         }, method: "POST",
         body: JSON.stringify(data),
      })
-      const json = await res.json()
-      await setAuthToken(json.data.token);
-      toast("Login successful!")
+      if (res.ok) {
+        const json = await res.json()
+        await setAuthToken(json.user.token);
+        toast("Login successful!")
+        router.push("/blog");
         setSuccess("Login successful!")
+      }
+      else {
+        return
+      }
+     
     } catch (err) {
       setError("Failed to login. Please check your credentials.")
       console.log(err, "error")

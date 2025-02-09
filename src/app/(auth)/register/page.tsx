@@ -50,16 +50,22 @@ export default function RegisterPage() {
     setSuccess(null);
 
     try {
-      await fetch(`${process.env.NEXT_BACKEND_URL}auth/register`, {
+    const res=  await fetch(`${process.env.NEXT_BACKEND_URL}user/register`, {
         headers: {
           "Content-Type": "application/json",
         },
         method: "POST",
         body: JSON.stringify(data), 
-      });
-      setSuccess("Registration successful! You can now login.");
-      toast("Registration successful! You can now login.");
-      router.push("/login");
+    });
+      if (res.ok) { 
+        const register = await res.json()
+        setSuccess("Registration successful! You can now login."); 
+        router.push("/login");
+        toast("Registration successful! You can now login.");
+      } 
+      else {
+        return
+      }
     } catch (err) {
       console.error(err); // Log error for debugging
       setError("Failed to register. Please try again.");
