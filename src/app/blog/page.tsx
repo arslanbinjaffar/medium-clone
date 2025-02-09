@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import BlogCard, { BlogType } from "@/components/blog/BlogCard";
 import BlogForm from "@/components/blog/BlogForm";
 import { createBlogAction, deleteBlogAction, getBlogs, updateBlogAction } from "../serverActions/blog";
-import { getAuthors } from "../serverActions/auth";
 import Loader from "@/components/Loader";
 
 interface AuthorType {
@@ -16,6 +15,7 @@ interface AuthorType {
   name: string;
   email: string;
   password: string;
+  
 }
 
 export default function BlogList() {
@@ -35,7 +35,7 @@ export default function BlogList() {
     setLoadingBlogs(true);
     try {
       const res = await getBlogs();
-      setBlogs(res.data);
+      setBlogs(res.blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
     } finally {
@@ -45,27 +45,15 @@ export default function BlogList() {
 
 
   useEffect(() => {
-    async function fetchAuthors() {
-      setLoadingAuthors(true);
-      try {
-        const res = await getAuthors();
-        setAuthors(res.data);
-      } catch (error) {
-        console.error("Error fetching authors:", error);
-      } finally {
-        setLoadingAuthors(false);
-      }
-    }
     fetchBlogs();
-    fetchAuthors();
   }, []);
 
   const handleCreateBlog = async (formData: FormData) => {
     setLoadingCreate(true);
     try {
       const result = await createBlogAction(formData);
-      if (result.error) {
-        toast(result.error);
+      if (result?.error) {
+        toast(result?.error);
       } else {
         toast("Blog created successfully!");
         setCreateModalOpen(false);

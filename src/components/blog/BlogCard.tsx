@@ -11,12 +11,8 @@ export interface BlogType {
   id: string;
   title: string;
   content: string;
-  authorId: string;
   createdAt: Date;
-    author: {
-    email:string
-    name:string
-  }
+  authorId: string;
 }
 
 interface BlogCardProps {
@@ -38,7 +34,7 @@ export default function BlogCard({ blog, onDelete, onEdit }: BlogCardProps) {
       </CardHeader>
       <CardContent className="flex-grow overflow-hidden">
         <p className="text-sm text-gray-600 mb-2">
-          By {blog.author.name} on {format(new Date(blog.createdAt), "MMMM d, yyyy")}
+          By me on {format(new Date(blog.createdAt), "MMMM d, yyyy")}
         </p>
               <p className="text-gray-700"
               dangerouslySetInnerHTML={{ __html: blog.content.length > 100

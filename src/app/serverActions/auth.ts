@@ -15,13 +15,13 @@
 // }
 
 
-export const getAuthors = async() => {
-    try {
-        const res = await fetch(`${process.env.NEXT_BACKEND_URL}auth/users`, {
-            method: 'GET',
-        })
-      return await res.json()
-    } catch (error) {
-        console.log(error,"error")
-    }
-}
+// export const getAuthors = async() => {
+//     try {
+//         const res = await fetch(`${process.env.NEXT_BACKEND_URL}user`, {
+//             method: 'GET',
+//         })
+//       return await res.json()
+//     } catch (error) {
+//         console.log(error,"error")
+//     }
+// }

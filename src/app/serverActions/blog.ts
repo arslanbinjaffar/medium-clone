@@ -1,10 +1,26 @@
+
+"use server";
+
+import { cookies } from "next/headers";
+
+export async function getAuthHeaders() {
+  const token = (await cookies()).get("token")?.value; 
+
+  if (!token) {
+    throw new Error("Unauthorized: No token found");
+  }
+
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+}
+
 export const getBlogs = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog/list`, {
+        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog`, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: await getAuthHeaders()
         });
 
         if (!res.ok) {
@@ -22,18 +38,14 @@ export const getBlogs = async () => {
 export const createBlogAction = async (formData: FormData) => {
     try {
         const title = formData.get("title");
-  const authorId = formData.get("authorId");
         const content = formData.get("content");
         const blog = {
             title,
-            authorId,
             content
         }
-        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog/create`, {
+        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: await getAuthHeaders(),
             body: JSON.stringify(blog)
         })
       return await res.json()
@@ -45,36 +57,42 @@ export const createBlogAction = async (formData: FormData) => {
 }
 
 
-export const updateBlogAction = async (formData: FormData,id:string) => {
-    try {
-        const title = formData.get("title");
-    const authorId = formData.get("authorId");
-            const content = formData.get("content");
-            const blog = {
-                title,
-                authorId,
-                content
-            }
-        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog/update/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(blog)
-        })
-      return await res.json()
-    } catch (error) {
-        console.error('Error updating blog:', error);
-        return error
-        
+
+export const updateBlogAction = async (formData: FormData, id: string) => {
+  try {
+    const title = formData.get("title");
+    const content = formData.get("content");
+    const blog = { title, content };
+
+    const headers = await getAuthHeaders(); 
+    if (!headers) {
+      return { error: "Unauthorized: Missing token" };
     }
-}
+
+    const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog/${id}`, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify(blog),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Failed to update blog");
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error updating blog:", error);
+    return { error: error.message || "Something went wrong" };
+  }
+};
+
 
 
 export const deleteBlogAction = async (id:string) => {
     try {
       
-        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog/delete/${id}`, {
+        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog/${id}`, {
             method: 'Delete',
             headers: {
                 'Content-Type': 'application/json'

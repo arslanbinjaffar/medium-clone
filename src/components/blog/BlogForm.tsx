@@ -87,7 +87,7 @@ export default function BlogForm({
             <Input id="title" name="title" required defaultValue={initialData?.title} />
           </div>
 
-          <div>
+          {/* <div>
             <Label htmlFor="author">Author</Label>
             <Select name="authorId" defaultValue={initialData?.authorId}>
               <SelectTrigger>
@@ -104,7 +104,7 @@ export default function BlogForm({
                 </SelectGroup>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
 
           <div>
             <Label htmlFor="content">Content</Label>
