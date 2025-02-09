@@ -25,7 +25,6 @@ export default function BlogList() {
   const [editingBlog, setEditingBlog] = useState<BlogType | null>(null);
   
   const [loadingBlogs, setLoadingBlogs] = useState(false);
-  const [loadingAuthors, setLoadingAuthors] = useState(false);
   const [loadingCreate, setLoadingCreate] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
 
@@ -140,7 +139,7 @@ export default function BlogList() {
           }}
         />
       )}
-      {loadingAuthors && loadingBlogs ? (
+      {loadingBlogs ? (
         <div className="flex justify-center items-center h-screen">
           <Loader/>
         </div>
@@ -156,7 +155,7 @@ export default function BlogList() {
           ))}
         </div>
       )}
-          { !loadingAuthors && !loadingBlogs && blogs.length == 0 && <div className="border p-5 rounded-lg capitalize">
+          {  !loadingBlogs && blogs.length == 0 && <div className="border p-5 rounded-lg capitalize">
             <h2 className="text-lg font-bold text-center">no Blog create new Blog</h2>
           </div>}
     </div>
