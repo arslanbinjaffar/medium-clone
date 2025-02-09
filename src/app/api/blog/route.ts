@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET() {
   try {
     const blogs = await prisma.blog.findMany({
-      include: { author: true },
     });
 
     return NextResponse.json({ message: "Blogs retrieved successfully", blogs }, { status: 200 });

@@ -114,9 +114,7 @@ export const getBlogbyID = async (id: string) => {
     try {
       const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog/${id}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: await getAuthHeaders()
       });
       
       if (!res.ok) {
