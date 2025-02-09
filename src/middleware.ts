@@ -3,9 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
- 
 
-  if (pathname === "/login" && token || pathname === "/" && token) {
+  if (pathname === "/") {
+    if (token) {
+      return NextResponse.redirect(new URL("/blog", req.url));
+    }
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  if (pathname === "/login" && token) {
     return NextResponse.redirect(new URL("/blog", req.url));
   }
 
@@ -17,5 +23,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/blog/:path*"],
+  matcher: ["/", "/login", "/blog/:path*"],
 };
