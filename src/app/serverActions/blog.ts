@@ -83,7 +83,11 @@ export const updateBlogAction = async (formData: FormData, id: string) => {
     return await res.json();
   } catch (error) {
     console.error("Error updating blog:", error);
-    return { error: error.message || "Something went wrong" };
+    if (error instanceof Error) {
+      return { error: error.message || "Something went wrong" };
+    } else {
+      return { error: "Something went wrong" };
+    }
   }
 };
 
