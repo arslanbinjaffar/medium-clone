@@ -51,28 +51,63 @@ type TiptapProviderProps = {
   useEffect(() => {
     if (!editor) return;
   
+    // Function to apply highlight based on selection (modify condition as needed)
     const highlightSelection = () => {
       const selection = window.getSelection();
       if (!selection || selection.rangeCount === 0) return;
   
       const range = selection.getRangeAt(0);
       const contentEl = contentElement.current;
-  
       if (!contentEl || !contentEl.contains(range.commonAncestorContainer)) return;
   
       const editorHTML = editor.getHTML();
       const selectedText = selection.toString().trim();
   
-      if (selectedText === editorHTML.replace(/<[^>]+>/g, "").trim()) {
+      // Here we compare selected text to the full content’s text.
+      // Adjust this condition if needed.
+      if (
+        selectedText &&
+        selectedText === editorHTML.replace(/<[^>]+>/g, "").trim() &&
+        !editor.isActive("highlight")
+      ) {
         editor.chain().focus().setMark("highlight", { class: "highlight-text" }).run();
       }
     };
   
+    // Listen for selection changes to apply the highlight mark
     document.addEventListener("selectionchange", highlightSelection);
+  
+    // Handler to remove highlight on Escape key press
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        editor.chain().focus().unsetMark("highlight").run();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+  
+    const handleClick = (e: MouseEvent) => {
+      const contentEl = contentElement.current;
+      if (!contentEl) return;
+      let target = e.target as HTMLElement;
+      while (target && target !== contentEl) {
+        if (target.classList.contains("highlight-text")) {
+          editor.chain().focus().unsetMark("highlight").run();
+          break;
+        }
+        target = target.parentElement!;
+      }
+    };
+  
+    contentElement.current?.addEventListener("click", handleClick);
+  
     return () => {
       document.removeEventListener("selectionchange", highlightSelection);
+      document.removeEventListener("keydown", handleKeyDown);
+      contentElement.current?.removeEventListener("click", handleClick);
     };
   }, [editor]);
+  
+  
   
 
   if (!editor) {
