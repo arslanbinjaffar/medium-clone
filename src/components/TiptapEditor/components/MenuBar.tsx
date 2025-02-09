@@ -16,7 +16,6 @@ import OrderedListButton from "./controls/OrderedList";
 import MoreMarkDropdown from "./controls/MoreMarkPopover";
 import LinkButton from "./controls/LinkButton";
 import CodeBlockButton from "./controls/CodeBlockButton";
-import ImageButton from "./controls/ImageButton2";
 import YoutubeButton from "./controls/YoutubeButton";
 import TextColorButton from "./controls/TextColorButton";
 import TextHighlightButton from "./controls/TextHighlightButton";
@@ -58,7 +57,6 @@ const MenuBar = () => {
         {/* <BlockquoteButton /> */}
         <LinkButton />
         <TableButton />
-        <ImageButton />
         {/* <YoutubeButton /> */}
         {/* <CodeBlockButton /> */}
         <InsertDropdown />

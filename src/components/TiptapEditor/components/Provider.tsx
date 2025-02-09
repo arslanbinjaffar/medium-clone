@@ -4,6 +4,7 @@ import {
   ReactNode,
   RefObject,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -14,7 +15,7 @@ import CodeMirrorEditor from "@/components/SourceEditor/Editor";
 
 type TiptapContextType = {
   editor: Editor;
-  contentElement: RefObject<Element>;
+  contentElement: RefObject<HTMLDivElement | null>;
   isFullScreen: boolean;
   isResizing: boolean;
   isSourceMode: boolean;
@@ -34,18 +35,45 @@ type TiptapProviderProps = {
   children?: ReactNode;
 };
 
-export const TiptapProvider = ({
+ const TiptapProvider = ({
   children,
   editorOptions,
   editorProps,
   slotBefore,
   slotAfter,
 }: TiptapProviderProps) => {
-  const contentElement = useRef<HTMLDivElement>(null);
+  const contentElement = useRef<HTMLDivElement | null>(null);
   const editor = useTiptapEditor(editorOptions);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isSourceMode, setIsSourceMode] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
+
+  useEffect(() => {
+    if (!editor) return;
+  
+    const highlightSelection = () => {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) return;
+  
+      const range = selection.getRangeAt(0);
+      const contentEl = contentElement.current;
+  
+      if (!contentEl || !contentEl.contains(range.commonAncestorContainer)) return;
+  
+      const editorHTML = editor.getHTML();
+      const selectedText = selection.toString().trim();
+  
+      if (selectedText === editorHTML.replace(/<[^>]+>/g, "").trim()) {
+        editor.chain().focus().setMark("highlight", { class: "highlight-text" }).run();
+      }
+    };
+  
+    document.addEventListener("selectionchange", highlightSelection);
+    return () => {
+      document.removeEventListener("selectionchange", highlightSelection);
+    };
+  }, [editor]);
+  
 
   if (!editor) {
     return null;
