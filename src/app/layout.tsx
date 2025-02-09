@@ -13,28 +13,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Medium - Share Your Stories",
+  title: "Medium Clone - Share Your Stories",
   description: "A powerful blogging platform where you can share ideas, read insightful stories, and connect with writers worldwide.",
-  keywords: ["Medium", "Next.js Blog", "Writing Platform", "Articles", "Storytelling"],
+  keywords: ["Medium Clone", "Next.js Blog", "Writing Platform", "Articles", "Storytelling"],
   authors: [{ name: "Your Name", url: "https://yourwebsite.com" }],
   openGraph: {
-    title: "Medium - Share Your Stories",
+    title: "Medium Clone - Share Your Stories",
     description: "Join a growing community of writers and readers on our Next.js-powered blogging platform.",
     url: "https://yourmediumclone.com",
-    siteName: "Medium",
+    siteName: "Medium Clone",
     images: [
       {
         url: "https://yourmediumclone.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Medium - Share Your Stories",
+        alt: "Medium Clone - Share Your Stories",
       },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Medium - Share Your Stories",
+    title: "Medium Clone - Share Your Stories",
     description: "A modern blogging platform built with Next.js. Write, publish, and engage with readers.",
     images: ["https://yourmediumclone.com/twitter-image.jpg"],
   },
