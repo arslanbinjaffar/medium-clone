@@ -11,3 +11,10 @@ export async function setAuthToken(token: string) {
 
   return { message: "Cookie set successfully" };
 }
+
+
+export async function removeAuthToken() {
+  (await cookies()).delete("token");
+
+  return { message: "Cookie removed successfully" };
+}

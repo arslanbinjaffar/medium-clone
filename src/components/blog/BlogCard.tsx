@@ -13,6 +13,9 @@ export interface BlogType {
   content: string;
   createdAt: Date;
   authorId: string;
+  author?: {
+    name:string
+  }
 }
 
 interface BlogCardProps {
@@ -34,13 +37,16 @@ export default function BlogCard({ blog, onDelete, onEdit }: BlogCardProps) {
       </CardHeader>
       <CardContent className="flex-grow overflow-hidden">
         <p className="text-sm text-gray-600 mb-2">
-          By me on {format(new Date(blog.createdAt), "MMMM d, yyyy")}
+        Published on  {format(new Date(blog.createdAt), "MMMM d, yyyy")}
         </p>
               <p className="text-gray-700"
               dangerouslySetInnerHTML={{ __html: blog.content.length > 100
                 ? `${blog.content.substring(0, 100)}...`
                 : blog.content }}>
           
+        </p>
+        <p>
+          Author:{blog.author?.name || "me"}
         </p>
       </CardContent>
       <CardFooter className="flex justify-between">

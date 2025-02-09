@@ -16,23 +16,41 @@ export async function getAuthHeaders() {
   };
 }
 
-export const getBlogs = async () => {
+export const getMyBlogs = async () => {
     try {
-        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog`, {
+        const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog/me`, {
             method: 'GET',
             headers: await getAuthHeaders()
         });
-
-        if (!res.ok) {
-            throw new Error('Failed to fetch blogs');
+        if (res.ok) {
+          return await res.json();
         }
-
-       return await res.json();
+      return;
       
     } catch (error) {
         console.error('Error fetching blogs:', error);
       
     }
+};
+
+
+export const getBlogs = async () => {
+  try {
+      const res = await fetch(`${process.env.NEXT_BACKEND_URL}blog`, {
+          method: 'GET',
+          headers: await getAuthHeaders()
+      });
+   console.log(res,"res")
+      if (!res.ok) {
+          throw new Error('Failed to fetch blogs');
+      }
+
+     return await res.json();
+    
+  } catch (error) {
+      console.error('Error fetching blogs:', error);
+    
+  }
 };
 
 export const createBlogAction = async (formData: FormData) => {

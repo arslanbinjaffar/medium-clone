@@ -13,6 +13,7 @@ export async function GET(
     const user=authMiddleware(request)    
       const blog = await prisma.blog.findUnique({
         where: { id },
+        
       });
 
       if (!blog) {

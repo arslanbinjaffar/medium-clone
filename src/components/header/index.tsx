@@ -1,20 +1,33 @@
+"use client"
 import React from "react";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import { removeAuthToken } from "@/app/serverActions/setAuthToken";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router=useRouter()
+  const handleLogout = async () => {
+    await removeAuthToken()
+    router.push("/login")
+  }
   return (
-    <header className="bg-background/95 backdrop-blur-sm py-4 shadow-sm">
+    <header className="bg-background/95 backdrop-blur-sm py-2 shadow-sm">
       <div className="container mx-auto flex items-center justify-between px-4">
-        <Link href="/">
+        <Link href="/blog">
           <p className="flex items-center">
             <BlogwebLogo />
           </p>
         </Link>
-        <nav>
-          <Link href="/blogs">
-            <p className="text-lg font-medium hover:underline">Blogs</p>
+        <nav className="flex gap-3 items-center">
+          <Link href="/myblog">
+            <p className="text-lg font-medium hover:font-bold hover:underline">My Blogs</p>
+          </Link>
+          <Link href="/blog">
+            <p className="text-lg font-medium hover:font-bold hover:underline">Blogs</p>
           </Link>
         </nav>
+        <Button variant={"destructive"} onClick={handleLogout}>Logout</Button>
       </div>
     </header>
   );

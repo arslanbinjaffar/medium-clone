@@ -4,16 +4,36 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 
+
 export async function GET() {
   try {
-    const blogs = await prisma.blog.findMany({
+    
+    const blogs = await prisma.blog.findMany();
+
+    const authorIds = [...new Set(blogs.map((blog) => blog.authorId))];
+
+    const authors = await prisma.user.findMany({
+      where: { id: { in: authorIds } }, 
+      select: { id: true, name: true, email: true },
     });
 
-    return NextResponse.json({ message: "Blogs retrieved successfully", blogs }, { status: 200 });
+    const blogsWithAuthors = blogs.map((blog) => ({
+      ...blog,
+      author: authors.find((author) => author.id === blog.authorId) || null,
+    }));
+
+    return NextResponse.json(
+      { message: "Blogs retrieved successfully", blogs: blogsWithAuthors },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Failed to fetch blogs", error: error instanceof Error ? error.message : error }, { status: 500 });
+    return NextResponse.json(
+      { message: "Failed to fetch blogs", error: error instanceof Error ? error.message : error },
+      { status: 500 }
+    );
   }
 }
+
 
 
 export async function POST(req: NextRequest) {
@@ -34,7 +54,7 @@ export async function POST(req: NextRequest) {
       data: {
         title: data.title,
         content: data.content,
-        authorId: user.id, 
+        authorId: user?.id as string, 
       }
     });
 

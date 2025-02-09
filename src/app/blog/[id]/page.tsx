@@ -3,11 +3,10 @@ import { format } from 'date-fns';
 import React from 'react';
 
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
-// import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import Loader from '@/components/Loader';
+import { BlogType } from '@/components/blog/BlogCard';
 
 export default async function BlogDetailPage({
   params,
@@ -16,7 +15,7 @@ export default async function BlogDetailPage({
   }) {
   const { id } = await params;
   const res = await getBlogbyID(id);
-  const blog = res.blog;
+  const blog:BlogType = res.blog;
   if (!blog) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -46,9 +45,11 @@ export default async function BlogDetailPage({
             <div className="prose prose-indigo">
               <div dangerouslySetInnerHTML={{ __html: blog.content }} />
             </div>
+          <p>
+          Author:{blog.author?.name || "me"}
+        </p>
           </CardContent>
           <Separator className="my-4" />
-        
         </Card>
       </div>
     </div>

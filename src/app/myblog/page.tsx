@@ -7,7 +7,7 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import BlogCard, { BlogType } from "@/components/blog/BlogCard";
 import BlogForm from "@/components/blog/BlogForm";
-import { createBlogAction, deleteBlogAction, getBlogs, updateBlogAction } from "../serverActions/blog";
+import { createBlogAction, deleteBlogAction, getBlogs, getMyBlogs, updateBlogAction } from "../serverActions/blog";
 import Loader from "@/components/Loader";
 
 interface AuthorType {
@@ -30,11 +30,10 @@ export default function BlogList() {
 
 
 
-   async function fetchBlogs() {
+   async function fetchMyBlogs() {
     setLoadingBlogs(true);
     try {
-      const res = await getBlogs();
-      console.log(res,"res")
+      const res = await getMyBlogs();
       setBlogs(res.blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -45,7 +44,7 @@ export default function BlogList() {
 
 
   useEffect(() => {
-    fetchBlogs();
+    fetchMyBlogs();
   }, []);
 
   const handleCreateBlog = async (formData: FormData) => {
@@ -63,7 +62,7 @@ export default function BlogList() {
       toast("Error creating blog");
     } finally {
       setLoadingCreate(false);
-      fetchBlogs();
+      fetchMyBlogs();
     }
   };
 
@@ -83,7 +82,7 @@ export default function BlogList() {
       toast("Error updating blog");
     } finally {
       setLoadingEdit(false);
-      fetchBlogs();
+      fetchMyBlogs();
     }
   };
 
@@ -100,10 +99,10 @@ export default function BlogList() {
       console.error("Error updating blog:", error);
       toast("Error updating blog");
     } finally {
-      fetchBlogs();
+        fetchMyBlogs();
     }
   };
- 
+
   return (
     <div className="container mx-auto ">
       <div className="flex justify-between items-center mb-8">

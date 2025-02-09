@@ -108,7 +108,7 @@ export default function BlogForm({
 
           <div>
             <Label htmlFor="content">Content</Label>
-            <div className="border rounded p-2">
+            <div className="rounded p-2">
               <TiptapEditor
                 ref={editorRef}
                 ssr={true}
@@ -120,7 +120,7 @@ export default function BlogForm({
                 contentMinHeight={256}
                 contentMaxHeight={640}
                 onContentChange={handleContentChange}
-                initialContent={content}
+                initialContent={""}
               />
             </div>
             <input type="hidden" name="content" value={content} />
