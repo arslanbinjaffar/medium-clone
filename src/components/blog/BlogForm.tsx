@@ -58,7 +58,6 @@ export default function BlogForm({
   useEffect(() => {
     setContent(initialData?.content || "<p>Start typing here...</p>");
   }, [initialData]);
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl w-full overflow-y-scroll h-[80vh]">
@@ -120,7 +119,7 @@ export default function BlogForm({
                 contentMinHeight={256}
                 contentMaxHeight={640}
                 onContentChange={handleContentChange}
-                initialContent={""}
+                initialContent={mode ==="edit"?content:""}
               />
             </div>
             <input type="hidden" name="content" value={content} />

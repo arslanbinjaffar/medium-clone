@@ -7,9 +7,8 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import BlogCard, { BlogType } from "@/components/blog/BlogCard";
 import BlogForm from "@/components/blog/BlogForm";
-import { createBlogAction, deleteBlogAction, getBlogs, getMyBlogs, updateBlogAction } from "../serverActions/blog";
+import { createBlogAction, deleteBlogAction, getBlogs, updateBlogAction } from "@/app/serverActions/blog";
 import Loader from "@/components/Loader";
-import Provider from "../Provider";
 
 interface AuthorType {
   id: string;
@@ -31,10 +30,11 @@ export default function BlogList() {
 
 
 
-  async function fetchMyBlogs() {
+  async function fetchBlogs() {
     setLoadingBlogs(true);
     try {
-      const res = await getMyBlogs();
+      const res = await getBlogs();
+      console.log(res, "res")
       setBlogs(res.blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -45,7 +45,7 @@ export default function BlogList() {
 
 
   useEffect(() => {
-    fetchMyBlogs();
+    fetchBlogs();
   }, []);
 
   const handleCreateBlog = async (formData: FormData) => {
@@ -63,7 +63,7 @@ export default function BlogList() {
       toast("Error creating blog");
     } finally {
       setLoadingCreate(false);
-      fetchMyBlogs();
+      fetchBlogs();
     }
   };
 
@@ -83,7 +83,7 @@ export default function BlogList() {
       toast("Error updating blog");
     } finally {
       setLoadingEdit(false);
-      fetchMyBlogs();
+      fetchBlogs();
     }
   };
 
@@ -100,15 +100,14 @@ export default function BlogList() {
       console.error("Error updating blog:", error);
       toast("Error updating blog");
     } finally {
-      fetchMyBlogs();
+      fetchBlogs();
     }
   };
 
   return (
-    <Provider>
       <div className="container mx-auto ">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Blog List</h1>
+          <h1 className="text-3xl font-bold">Blogs</h1>
           <Button onClick={() => setCreateModalOpen(true)} disabled={loadingCreate}>
             <Plus className="w-4 h-4 mr-2" />
             Create Blog
@@ -159,7 +158,6 @@ export default function BlogList() {
         )}
 
       </div>
-    </Provider>
 
   );
 }

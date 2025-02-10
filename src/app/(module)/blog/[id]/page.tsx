@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { BlogType } from '@/components/blog/BlogCard';
+import Provider from '@/app/Provider';
 
 export default async function BlogDetailPage({
   params,
