@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Define an array of protected routes
+const protectedRoutes = ["/blog", "/myblog"];
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
@@ -15,7 +18,8 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/blog", req.url));
   }
 
-  if (pathname.startsWith("/blog") && !token) {
+  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
+  if (isProtectedRoute && !token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -23,5 +27,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/blog/:path*"],
+  matcher: ["/", "/login", "/blog/:path*", "/myblog"],
 };

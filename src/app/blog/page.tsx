@@ -15,7 +15,7 @@ interface AuthorType {
   name: string;
   email: string;
   password: string;
-  
+
 }
 
 export default function BlogList() {
@@ -23,18 +23,18 @@ export default function BlogList() {
   const [authors, setAuthors] = useState<AuthorType[]>([]);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [editingBlog, setEditingBlog] = useState<BlogType | null>(null);
-  
+
   const [loadingBlogs, setLoadingBlogs] = useState(false);
   const [loadingCreate, setLoadingCreate] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
 
 
 
-   async function fetchBlogs() {
+  async function fetchBlogs() {
     setLoadingBlogs(true);
     try {
       const res = await getBlogs();
-      console.log(res,"res")
+      console.log(res, "res")
       setBlogs(res.blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -70,7 +70,7 @@ export default function BlogList() {
   const handleEditBlog = async (formData: FormData) => {
     setLoadingEdit(true);
     try {
-      const result = await updateBlogAction(formData,editingBlog?.id as string);
+      const result = await updateBlogAction(formData, editingBlog?.id as string);
       if (result.error) {
         toast(result.error);
       } else {
@@ -87,7 +87,7 @@ export default function BlogList() {
     }
   };
 
-  const handleDeleteBlog = async(id: string) => {
+  const handleDeleteBlog = async (id: string) => {
     try {
       const result = await deleteBlogAction(id);
       if (result.error) {
@@ -103,61 +103,64 @@ export default function BlogList() {
       fetchBlogs();
     }
   };
- 
+
   return (
-    <div className="container mx-auto ">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Blog List</h1>
-        <Button onClick={() => setCreateModalOpen(true)} disabled={loadingCreate}>
-          <Plus className="w-4 h-4 mr-2" />
-          Create Blog
-        </Button>
-      </div>
+    <Provider>
+      <div className="container mx-auto ">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Blog List</h1>
+          <Button onClick={() => setCreateModalOpen(true)} disabled={loadingCreate}>
+            <Plus className="w-4 h-4 mr-2" />
+            Create Blog
+          </Button>
+        </div>
 
-      <BlogForm
-        open={createModalOpen}
-        onOpenChange={setCreateModalOpen}
-        onSubmit={handleCreateBlog}
-        authors={authors}
-        mode="create"
-        loading={loadingCreate}
-      />
-
-      {editingBlog && (
         <BlogForm
-          open={!!editingBlog}
-          onOpenChange={(open) => {
-            if (!open) setEditingBlog(null);
-          }}
-          onSubmit={handleEditBlog}
-          loading={loadingEdit}
+          open={createModalOpen}
+          onOpenChange={setCreateModalOpen}
+          onSubmit={handleCreateBlog}
           authors={authors}
-          mode="edit"
-          initialData={{
-            title: editingBlog.title,
-            content: editingBlog.content,
-            authorId: editingBlog.authorId,
-          }}
+          mode="create"
+          loading={loadingCreate}
         />
-      )}
-      {loadingBlogs ? (
-        <div className="flex justify-center items-center h-screen">
-          <Loader/>
-        </div>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {blogs.length>0 && blogs.map((blog) => (
-            <BlogCard
-              key={blog.id}
-              blog={blog}
-              onDelete={handleDeleteBlog}
-              onEdit={(blog) => setEditingBlog(blog)}
-            />
-          ))}
-        </div>
-      )}
-         
-    </div>
+
+        {editingBlog && (
+          <BlogForm
+            open={!!editingBlog}
+            onOpenChange={(open) => {
+              if (!open) setEditingBlog(null);
+            }}
+            onSubmit={handleEditBlog}
+            loading={loadingEdit}
+            authors={authors}
+            mode="edit"
+            initialData={{
+              title: editingBlog.title,
+              content: editingBlog.content,
+              authorId: editingBlog.authorId,
+            }}
+          />
+        )}
+        {loadingBlogs ? (
+          <div className="flex justify-center items-center h-screen">
+            <Loader />
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {blogs.length > 0 && blogs.map((blog) => (
+              <BlogCard
+                key={blog.id}
+                blog={blog}
+                onDelete={handleDeleteBlog}
+                onEdit={(blog) => setEditingBlog(blog)}
+              />
+            ))}
+          </div>
+        )}
+
+      </div>
+    </Provider>
+
   );
 }
 

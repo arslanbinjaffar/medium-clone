@@ -51,12 +51,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}
-        className={`${geistSans.variable} ${geistMono.variable} antialiased p-8`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header/>
         {children}
         <Toaster position="top-left" richColors />
-        <Footer/>
       </body>
     </html>
   );
