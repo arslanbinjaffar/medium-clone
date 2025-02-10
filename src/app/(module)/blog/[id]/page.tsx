@@ -7,7 +7,6 @@ import { Separator } from '@/components/ui/separator';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { BlogType } from '@/components/blog/BlogCard';
-import Provider from '@/app/Provider';
 
 export default async function BlogDetailPage({
   params,
@@ -26,7 +25,6 @@ export default async function BlogDetailPage({
   }
 
   return (
-    <Provider>
 
       <div className="min-h-screen bg-gray-50 py-10">
         <div className="w-[80vw] mx-auto">
@@ -56,7 +54,6 @@ export default async function BlogDetailPage({
           </Card>
         </div>
       </div>
-    </Provider>
 
   );
 }
